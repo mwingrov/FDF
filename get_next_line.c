@@ -6,18 +6,18 @@
 /*   By: mwingrov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/27 16:05:19 by mwingrov          #+#    #+#             */
-/*   Updated: 2017/07/02 15:29:48 by mwingrov         ###   ########.fr       */
+/*   Updated: 2017/11/19 06:04:57 by mwingrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "libft/includes/libft.h"
+#include "libft/libft.h"
 
-static ssize_t    read_line(const int fd, char **line)
+static ssize_t		read_line(const int fd, char **line)
 {
-	ssize_t        size;
-	char        *buffer;
-	char        *str;
+	ssize_t			size;
+	char			*buffer;
+	char			*str;
 
 	buffer = ft_strnew(sizeof(*buffer) * (BUFF_SIZE + 1));
 	if (!buffer)
@@ -37,11 +37,11 @@ static ssize_t    read_line(const int fd, char **line)
 	return (size);
 }
 
-int                get_next_line(const int fd, char **line)
+int					get_next_line(const int fd, char **line)
 {
-	ssize_t        line_read;
-	char        *new_line;
-	static char    *str = NULL;
+	ssize_t			line_read;
+	char			*new_line;
+	static char		*str = NULL;
 
 	if (!line || (!str && (str = ft_strnew(sizeof(*str))) == NULL))
 		return (-1);

@@ -5,50 +5,82 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mwingrov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/07/02 14:18:29 by mwingrov          #+#    #+#             */
-/*   Updated: 2017/07/02 18:15:43 by mwingrov         ###   ########.fr       */
+/*   Created: 2017/11/17 05:26:49 by mwingrov          #+#    #+#             */
+/*   Updated: 2017/11/22 14:33:43 by mwingrov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft/includes/get_next_line.h"
-#include <stdlib.h>
-int	read_line(delta **arg)
-{
-	int			index;
-	int			ret;
-	t_point		p0;
-	t_point1	p1;
 
-	p1.fd = open("42.fdf", O_RDONLY);
-	p1.lines = 0;
-	while (get_next_line(p1.fd, &p1.line) == 1)
+double			**alloc_sp(t_sizexy z)
+{
+	double		**a;
+	int			i;
+
+	i = 0;
+	a = (double **)malloc(sizeof(double *) * z.y);
+	while (i < z.y)
 	{
-		p1.lines++;
-		p1.f = ft_strsplit(b.line, ' ');
-		p1.i = 0;
-		while (p1.f[p1.i])
-			p1.i++;
+		a[i] = (double *)malloc(sizeof(double) * z.x);
+		i++;
 	}
-	close(p1.fd);
-	index = 0;
-	ret = p1.lines * p1.i;
-	if (!(*arr = (t_arr*)malloc(sizeof(t_arr) * p1.lines * p1.i)))
-		return (-1);
-	p1.fd = open("42.fdf", O_RDONLY);
-	while (get_next_line(p1.fd, &p1.line) == 1)
+	return (a);
+}
+
+t_sizexy		get_xy(char *filename)
+{
+	char		*line;
+	t_sizexy	z;
+	char		**cnt;
+
+	z.i = 0;
+	z.x = 0;
+	z.y = 0;
 	{
-		p1.f = ft_strsplit(b.line, ' ');
-		p1.i = -1;
-		while (p1.f[++p1.i])
+		z.fd = open(filename, O_RDONLY);
+		while (get_next_line(z.fd, &line) > 0)
 		{
-			p0.x = p1.i;
-			p0.y = p1.j;
-			p0.z = ft_atoi(p1.f[p1.i]);
-			(*arr)[index++] = a;
+			while (line[z.i] != '\0')
+			{
+				cnt = ft_strsplit(line, ' ');
+				z.x = 0;
+				z.index = 0;
+				while (cnt[z.index++])
+					z.x++;
+				z.i++;
+			}
+			z.y++;
 		}
-		p1.j++;
 	}
-	close(p1.fd);
-	return (ret);
+	close(z.fd);
+	return (z);
+}
+
+double			**two_arr(char *filename)
+{
+	double		**arr;
+	t_sizexy	z;
+	char		*line;
+	char		**newl;
+
+	z = get_xy(filename);
+	z.j = 0;
+	arr = alloc_sp(z);
+	z.fd = open(filename, O_RDONLY);
+	while (z.j < z.y)
+	{
+		z.i = 0;
+		get_next_line(z.fd, &line);
+		newl = ft_strsplit(line, ' ');
+		while (z.i < z.x)
+		{
+			arr[(int)z.j][(int)z.i] = ft_atoi(newl[(int)z.i]);
+			z.i++;
+		}
+		z.j++;
+		free(line);
+	}
+	close(z.fd);
+	return (arr);
+	free(newl);
 }
